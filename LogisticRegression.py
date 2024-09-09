@@ -42,10 +42,10 @@ model = LogisticRegression()
 model.fit(X_train, y_train)
 
 # Save the trained model for later use
-dump(model, 'test.joblib')
+dump(model, 'LogisticRegression.joblib')
 
 # Load the trained model
-loaded_model = load('test.joblib')
+loaded_model = load('LogisticRegression.joblib')
 
 # --- Streamlit UI ---
 st.title('Diabetes Prediction App')
