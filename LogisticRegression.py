@@ -51,12 +51,16 @@ if uploaded_file is not None:
     # --- Streamlit UI ---
     st.title('Diabetes Prediction App')
 
+    # Ensure that selectbox options match the ones used during training
+    gender_options = label_encoders['gender'].classes_.tolist()
+    smoking_history_options = label_encoders['smoking_history'].classes_.tolist()
+
     # Create UI elements for user input
     age = st.number_input('Age', min_value=18, max_value=100)
-    gender = st.selectbox('Gender', ['Male', 'Female'])
+    gender = st.selectbox('Gender', gender_options)
     hypertension = st.selectbox('Hypertension', ['Yes', 'No'])
     heart_disease = st.selectbox('Heart Disease', ['Yes', 'No'])
-    smoking_history = st.selectbox('Smoking History', ['Never', 'Current', 'Former'])
+    smoking_history = st.selectbox('Smoking History', smoking_history_options)
     bmi = st.number_input('BMI', min_value=15, max_value=60)
     hb_a1c_level = st.number_input('HbA1c Level', min_value=3, max_value=15)
     blood_glucose_level = st.number_input('Blood Glucose Level', min_value=0, max_value=500)
