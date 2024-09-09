@@ -35,6 +35,9 @@ if uploaded_file is not None:
     X = data.drop('diabetes', axis=1)
     y = data['diabetes']
 
+    # Save the feature names (to match later during prediction)
+    feature_names = X.columns
+
     # Split data into training and testing sets
     X_train, X_test, y_train, y_test = train_test_split(X, y, train_size=0.8, random_state=42)
 
@@ -42,11 +45,13 @@ if uploaded_file is not None:
     model = LogisticRegression()
     model.fit(X_train, y_train)
 
-    # Save the trained model for later use
+    # Save the trained model and feature names for later use
     dump(model, 'test.joblib')
+    dump(feature_names, 'feature_names.joblib')
 
-    # Load the trained model
+    # Load the trained model and feature names
     loaded_model = load('test.joblib')
+    feature_names = load('feature_names.joblib')
 
     # --- Streamlit UI ---
     st.title('Diabetes Prediction App')
@@ -82,6 +87,9 @@ if uploaded_file is not None:
             'HbA1c_level': [hb_a1c_level],
             'blood_glucose_level': [blood_glucose_level]
         })
+
+        # Reorder columns to match the training data
+        new_data = new_data[feature_names]
 
         # Make a prediction
         prediction = loaded_model.predict(new_data)
