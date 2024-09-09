@@ -7,12 +7,11 @@ from sklearn.preprocessing import LabelEncoder
 from sklearn.impute import SimpleImputer
 from joblib import dump, load
 
-# Streamlit file uploader
-uploaded_file = st.file_uploader("Upload CSV file", type=["csv"])
+# Replace this with the actual file path on your system
+file_path = r'diabetes_prediction_dataset.csv'
 
-if uploaded_file is not None:
-    # Load data from uploaded CSV file
-    data = pd.read_csv(uploaded_file)
+# Load data from the hardcoded file path
+data = pd.read_csv(file_path)
 
     # Handle missing values (if any)
     imputer = SimpleImputer(strategy='mean')  # You can change strategy as needed
