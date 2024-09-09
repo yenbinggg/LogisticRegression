@@ -70,31 +70,31 @@ if st.button('Predict'):
     gender_encoded = label_encoders['gender'].transform([gender])[0]
     smoking_history_encoded = label_encoders['smoking_history'].transform([smoking_history])[0]
 
-# Ensure the new data has the same columns as the training data
-expected_columns = X.columns
+    # Ensure the new data has the same columns as the training data
+    expected_columns = X.columns
 
-# Create a DataFrame with the same columns as X_train
-new_data = pd.DataFrame({
-    'age': [age], 
-    'gender': [gender_encoded],  
-    'hypertension': [1 if hypertension == 'Yes' else 0],
-    'heart_disease': [1 if heart_disease == 'Yes' else 0],
-    'smoking_history': [smoking_history_encoded],
-    'bmi': [bmi],  
-    'HbA1c_level': [hb_a1c_level],
-    'blood_glucose_level': [blood_glucose_level]
-})
+    # Create a DataFrame with the same columns as X_train
+    new_data = pd.DataFrame({
+        'age': [age], 
+        'gender': [gender_encoded],  
+        'hypertension': [1 if hypertension == 'Yes' else 0],
+        'heart_disease': [1 if heart_disease == 'Yes' else 0],
+        'smoking_history': [smoking_history_encoded],
+        'bmi': [bmi],  
+        'HbA1c_level': [hb_a1c_level],
+        'blood_glucose_level': [blood_glucose_level]
+    })
 
-# Add any missing columns with default values if necessary
-for column in expected_columns:
-    if column not in new_data.columns:
-        new_data[column] = 0
+    # Add any missing columns with default values if necessary
+    for column in expected_columns:
+        if column not in new_data.columns:
+            new_data[column] = 0
 
-# Ensure columns are in the same order as in X_train
-new_data = new_data[expected_columns]
+    # Ensure columns are in the same order as in X_train
+    new_data = new_data[expected_columns]
 
-# Make a prediction
-prediction = loaded_model.predict(new_data)
+    # Make a prediction
+    prediction = loaded_model.predict(new_data)
 
     # Display the prediction with informative messages
     if prediction[0] == 1:
