@@ -62,8 +62,6 @@ if st.button('Predict'):
         'blood_glucose_level': [blood_glucose_level]        
     })
 
-    print(X_train.dtypes)
-
     # Load the trained model
     loaded_model = load('test.joblib')
 
