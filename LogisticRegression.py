@@ -3,6 +3,8 @@ import pandas as pd
 import numpy as np
 from sklearn.model_selection import train_test_split
 from sklearn.linear_model import LogisticRegression
+from sklearn.preprocessing import LabelEncoder
+from sklearn.impute import SimpleImputer
 from joblib import dump, load
 
 # Streamlit file uploader
@@ -11,6 +13,23 @@ uploaded_file = st.file_uploader("Upload CSV file", type=["csv"])
 if uploaded_file is not None:
     # Load data from uploaded CSV file
     data = pd.read_csv(uploaded_file)
+
+    # Handle missing values (if any)
+    imputer = SimpleImputer(strategy='mean')  # You can change strategy as needed
+
+    # Assuming the columns 'gender' and 'smoking_history' are categorical
+    label_encoders = {}
+    
+    # Encode categorical columns
+    for col in ['gender', 'smoking_history']:
+        le = LabelEncoder()
+        data[col] = le.fit_transform(data[col])
+        label_encoders[col] = le  # Store the encoder if needed later for inverse transform
+
+    # Handle missing values for numerical columns
+    data[['age', 'bmi', 'HbA1c_level', 'blood_glucose_level']] = imputer.fit_transform(
+        data[['age', 'bmi', 'HbA1c_level', 'blood_glucose_level']]
+    )
 
     # Split data into features (X) and target variable (y)
     X = data.drop('diabetes', axis=1)
@@ -44,20 +63,21 @@ if uploaded_file is not None:
 
     # Button to trigger prediction
     if st.button('Predict'):
+        # Convert categorical data from user input into the same format used during training
+        gender_encoded = label_encoders['gender'].transform([gender])[0]
+        smoking_history_encoded = label_encoders['smoking_history'].transform([smoking_history])[0]
+
         # Create a new data point based on user inputs
         new_data = pd.DataFrame({
-            'age': [int(age)], 
-            'gender': [gender],  
+            'age': [age], 
+            'gender': [gender_encoded],  
             'hypertension': [1 if hypertension == 'Yes' else 0],
             'heart_disease': [1 if heart_disease == 'Yes' else 0],
-            'smoking_history': [1 if smoking_history == 'Current' else (2 if smoking_history == 'Former' else 0)],
-            'bmi': [float(bmi)],  
+            'smoking_history': [smoking_history_encoded],
+            'bmi': [bmi],  
             'HbA1c_level': [hb_a1c_level],
             'blood_glucose_level': [blood_glucose_level]
         })
-
-        # Load the trained model
-        loaded_model = load('test.joblib')
 
         # Make a prediction
         prediction = loaded_model.predict(new_data)
@@ -67,4 +87,3 @@ if uploaded_file is not None:
             st.error('Predicted: You are at a higher risk of diabetes. Please consult a healthcare professional.')
         else:
             st.success('Predicted: You are at a lower risk of diabetes based on this model. It is still recommended to maintain a healthy lifestyle and consult a healthcare professional for regular checkups.')
-
