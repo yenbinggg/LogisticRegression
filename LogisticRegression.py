@@ -22,6 +22,9 @@ model.fit(X_train, y_train)
 # Save the trained model for later use
 dump(model, 'test.joblib')  # Save the model after training
 
+# Load the trained model
+loaded_model = load('test.joblib') 
+
 # --- Streamlit UI ---
 
 st.title('Diabetes Prediction App')
