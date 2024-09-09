@@ -6,7 +6,7 @@ from sklearn.linear_model import LogisticRegression
 from joblib import dump, load
 
 # Load data
-# data = pd.read_csv(r'C:\Users\yenbing\OneDrive\Documents\AI Assignment\diabetes_prediction_dataset.csv')
+data = pd.read_csv('diabetes_prediction_dataset.csv')
 
 # Split data into features (X) and target variable (y)
 X = data.drop('diabetes', axis=1)
