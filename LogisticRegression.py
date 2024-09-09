@@ -23,7 +23,7 @@ model.fit(X_train, y_train)
 dump(model, 'test.joblib')  # Save the model after training
 
 # Load the trained model
-loaded_model = load('test.joblib') 
+loaded_model = load('test.joblib')
 
 # --- Streamlit UI ---
 
@@ -43,26 +43,15 @@ blood_glucose_level = st.number_input('Blood Glucose Level', min_value=0, max_va
 if st.button('Predict'):
 
     # Create a new data point based on user inputs
-    # new_data = pd.DataFrame({
-    #     'age': [age],
-    #     'gender': [gender],
-    #     'hypertension': [1 if hypertension == 'Yes' else 0],
-    #     'heart_disease': [1 if heart_disease == 'Yes' else 0],
-    #     'smoking_history': [1 if smoking_history == 'Current' else (2 if smoking_history == 'Former' else 0)],
-    #     'bmi': [bmi],
-    #     'HbA1c_level': [hb_a1c_level],
-    #     'blood_glucose_level': [blood_glucose_level]
-    # })
-
-        new_data = pd.DataFrame({
+    new_data = pd.DataFrame({
         'age': [int(age)],  # Convert age to integer
         'gender': [gender],  # Assuming gender is already a category
         'hypertension': [1 if hypertension == 'Yes' else 0],
         'heart_disease': [1 if heart_disease == 'Yes' else 0],
-        # ... (similar logic for other categorical features)
+        'smoking_history': [1 if smoking_history == 'Current' else (2 if smoking_history == 'Former' else 0)],
         'bmi': [float(bmi)],  # Convert bmi to float
         'HbA1c_level': [hb_a1c_level],
-        'blood_glucose_level': [blood_glucose_level]        
+        'blood_glucose_level': [blood_glucose_level]
     })
 
     # Load the trained model
